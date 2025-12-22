@@ -1,0 +1,54 @@
+{
+    admin off
+}
+
+:{$PORT} {
+
+    log {
+        output stdout
+        format console
+    }
+
+    header X-Caddy "active"
+
+    # HEALTH CHECK
+
+    @health path /healthz
+    respond @health 200
+
+    # PATH SCAN BLOCKERS
+    @xmlrpc path /xmlrpc.php
+    respond @xmlrpc 403
+
+    @rx_env path_regexp (?i)/?(.*/)?\.env
+    respond @rx_env 403
+
+    @rx_git path_regexp (?i)/?(.*/)?\.git
+    respond @rx_git 403
+
+    @rx_wpinc path_regexp (?i)/?(.*/)?wp-includes
+    respond @rx_wpinc 403
+
+    @rx_wplogin path_regexp (?i)/?(.*/)?wp-login\.php
+    respond @rx_wplogin 403
+
+    @rx_wpconfig path_regexp (?i)/?(.*/)?wp-config\.php
+    respond @rx_wpconfig 403
+
+    @rx_phpmy path_regexp (?i)/?(.*/)?phpmyadmin
+    respond @rx_phpmy 403
+
+    # SECURITY HEADERS
+    header {
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin"
+    }
+
+    # BACKEND SERVICE
+    reverse_proxy {$BACKEND_HOST}:{$BACKEND_PORT} {
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up Host {host}
+    }
+}
