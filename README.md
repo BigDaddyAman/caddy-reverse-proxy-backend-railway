@@ -44,6 +44,20 @@ BACKEND_PORT=8000
 
 ---
 
+---
+
+## 🌐 Custom Domain
+
+To use a custom domain with this proxy:
+
+1. Open your Railway project
+2. Go to **Settings → Domains**
+3. Add your custom domain
+4. Update your DNS records as instructed by Railway
+
+Railway handles HTTPS and TLS termination automatically.  
+No additional Caddy configuration is required.
+
 ## 🩺 Health Check
 
 The proxy exposes a health endpoint:
