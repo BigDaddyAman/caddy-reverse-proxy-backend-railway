@@ -1,6 +1,8 @@
 # Caddy Reverse Proxy – Backend Service (Railway)
 
-A minimal, production-ready **Caddy reverse proxy** for backend services running on **Railway**.
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/okIJq1?referralCode=nIQTyp&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
+A minimal, production-ready **Caddy reverse proxy** for backend services running on **Railway**.  
 Framework-agnostic — works with Django, FastAPI, Flask, Node.js, Go, and any HTTP backend.
 
 This template forwards all incoming traffic to a private backend service using Railway’s internal network.
