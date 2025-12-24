@@ -2,7 +2,7 @@
     admin off
 }
 
-:{$PORT} {
+:{$PORT:8080} {
 
     log {
         output stdout
@@ -11,12 +11,17 @@
 
     header X-Caddy "active"
 
-    # HEALTH CHECK
+    # ========================
+    # BAD BOT BLOCKING
+    # ========================
+    @badbots {
+        header_regexp ua User-Agent (?i)(curl|wget|python|bot|crawler|spider|scan|scrapy|go-http-client|libwww-perl|java|php|perl|ruby)
+    }
+    respond @badbots 403
 
-    @health path /healthz
-    respond @health 200
-
+    # ========================
     # PATH SCAN BLOCKERS
+    # ========================
     @xmlrpc path /xmlrpc.php
     respond @xmlrpc 403
 
@@ -38,17 +43,26 @@
     @rx_phpmy path_regexp (?i)/?(.*/)?phpmyadmin
     respond @rx_phpmy 403
 
+    @rx_wlw path_regexp (?i)/?(.*/)?wlwmanifest\.xml
+    respond @rx_wlw 403
+
+    @rx_awsconfig path_regexp (?i)/?(.*/)?aws[-_.]?config\.js
+    respond @rx_awsconfig 403
+
+    @rx_awsfiles path_regexp (?i)/?(.*/)?aws.*\.(js|json|yml|yaml|txt|env|config)
+    respond @rx_awsfiles 403
+
+    # ========================
     # SECURITY HEADERS
+    # ========================
     header {
         X-Frame-Options "DENY"
         X-Content-Type-Options "nosniff"
         Referrer-Policy "strict-origin"
     }
 
-    # BACKEND SERVICE
-    reverse_proxy {$BACKEND_HOST}:{$BACKEND_PORT} {
-        header_up X-Forwarded-Proto {scheme}
-        header_up X-Forwarded-For {remote}
-        header_up Host {host}
-    }
-}
+    # ========================
+    # DEFAULT REVERSE PROXY
+    # ========================
+    reverse_proxy {$BACKEND_HOST}:{$BACKEND_PORT}
+
