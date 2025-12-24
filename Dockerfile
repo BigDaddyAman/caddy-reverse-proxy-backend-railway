@@ -14,6 +14,4 @@ COPY entrypoint.sh /app/entrypoint.sh
 
 RUN chmod 755 /app/entrypoint.sh
 
-COPY caddy_errors /app/caddy_errors
-
 ENTRYPOINT ["sh", "/app/entrypoint.sh"]
