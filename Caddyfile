@@ -64,9 +64,9 @@
     # ========================
     # DEFAULT REVERSE PROXY
     # ========================
-     @backend_ready expression env.BACKEND_HOST != "" && env.BACKEND_PORT != ""
+    @backend_ready expression env("BACKEND_HOST") != "" && env("BACKEND_PORT") != ""
 
-     handle @backend_ready {
+    handle @backend_ready {
         reverse_proxy {$BACKEND_HOST}:{$BACKEND_PORT}
     }
 
