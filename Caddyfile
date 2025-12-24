@@ -64,6 +64,8 @@
     # ========================
     # DEFAULT REVERSE PROXY
     # ========================
-    reverse_proxy {$BACKEND_HOST}:{$BACKEND_PORT}
+    @backend_ready expression `{env.BACKEND_HOST} != "" && {env.BACKEND_PORT} != ""`
+    reverse_proxy @backend_ready {$BACKEND_HOST}:{$BACKEND_PORT}
+    respond "Backend not configured. Set BACKEND_HOST and BACKEND_PORT." 503
 
 }
