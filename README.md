@@ -105,6 +105,10 @@ All incoming traffic will be proxied to your backend.
 
 ---
 
-## 📄 License
+## License
 
-MIT License
+MIT License.
+
+Uses Caddy (Apache License 2.0).
+
+Community-maintained.
