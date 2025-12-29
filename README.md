@@ -105,10 +105,10 @@ All incoming traffic will be proxied to your backend.
 
 ---
 
-## License
+## 📄 License
 
-MIT License.
+This project is licensed under the MIT License.
 
-Uses Caddy (Apache License 2.0).
+It uses Caddy, which is licensed under the Apache License 2.0.
 
-Community-maintained.
+This template is community-maintained.
