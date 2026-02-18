@@ -11,22 +11,7 @@
 
     @blocked {
         header_regexp User-Agent (?i)(curl|wget|python|bot|crawler|spider|scan|scrapy|go-http-client|libwww-perl|java|php|perl|ruby)
-        path_regexp (?i)^/(
-            \.|                      
-            xmlrpc\.php|
-            wp-|wp-login|wp-config|
-            phpmyadmin|
-            wlwmanifest\.xml|
-            aws|
-            docker|
-            composer|
-            backup|dump|
-            config|
-            bitbucket|travis|
-            npm|
-            svn|git|
-            htaccess
-        )
+        path_regexp (?i)^/(\.|xmlrpc\.php|wp-|wp-login|wp-config|phpmyadmin|wlwmanifest\.xml|aws|docker|composer|backup|dump|config|bitbucket|travis|npm|svn|git|htaccess)
     }
 
     handle @blocked {
