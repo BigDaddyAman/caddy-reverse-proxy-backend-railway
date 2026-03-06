@@ -9,31 +9,67 @@
         format console
     }
 
+    # ================================
+    # BLOCK BAD USER AGENTS
+    # ================================
     @bad_ua {
-        header_regexp User-Agent (?i)(curl|wget|python|bot|crawler|spider|scan|scrapy|go-http-client|libwww-perl|java|php|perl|ruby)
+        header_regexp User-Agent (?i)(curl|wget|python|scrapy|scan|go-http-client|libwww-perl|java|php|perl|ruby)
     }
 
     handle @bad_ua {
         respond 403
     }
 
+    # ================================
+    # BLOCK SCANNER PATHS
+    # ================================
     @bad_path {
-        path_regexp (?i)^/(\.|xmlrpc\.php|wp-|wp-login|wp-config|phpmyadmin|wlwmanifest\.xml|aws|docker|composer|backup|dump|config|bitbucket|travis|npm|svn|git|htaccess)
+        path_regexp (?i)^/(\.|xmlrpc\.php|wp-|phpmyadmin|wlwmanifest\.xml|aws|docker|backup|dump|config|git|svn)
     }
 
     handle @bad_path {
         respond 403
     }
 
+    # ================================
+    # STATIC ROOT
+    # ================================
+    root * /app/caddy/site
+
+    # ================================
+    # DJANGO API
+    # ================================
+    @django_api {
+        path /health* /api/* /report*
+    }
+
+    reverse_proxy @django_api {$BACKEND_HOST}:{$BACKEND_PORT}
+
+    # ================================
+    # STATIC FILES
+    # ================================
+    @static {
+        file
+    }
+
+    handle @static {
+        file_server
+    }
+
+    # ================================
+    # FALLBACK → DJANGO (SHORTLINKS)
+    # ================================
     handle {
-
-        header {
-            X-Caddy "active"
-            X-Frame-Options "DENY"
-            X-Content-Type-Options "nosniff"
-            Referrer-Policy "strict-origin"
-        }
-
         reverse_proxy {$BACKEND_HOST}:{$BACKEND_PORT}
+    }
+
+    # ================================
+    # SECURITY HEADERS
+    # ================================
+    header {
+        X-Caddy "active"
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin"
     }
 }
